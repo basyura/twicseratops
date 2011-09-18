@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 
 class Class1 {
-    private static string PROP_NAME = "./test.propertes";
+    private static string PROP_NAME = "./test.properties";
     static void Main(string[] args) {
 
         string data = "{\"name\" : \"basyura\"}";
