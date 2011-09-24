@@ -7,30 +7,27 @@ class Class1 {
     private static string PROP_NAME = "./test.properties";
     static void Main(string[] args) {
 
-        string data = "{\"name\" : \"basyura\"}";
+        dynamic json = null;
         if (File.Exists(PROP_NAME)) {
             Console.WriteLine("read from " + PROP_NAME);
-            FileStream    fs = new FileStream(PROP_NAME , FileMode.Open);
-            StreamReader  sr = new StreamReader(fs);
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = sr.ReadLine()) != null) {
-                sb.Append(line);
+            using (FileStream fs = new FileStream(PROP_NAME, FileMode.Open)) {
+                using (StreamReader sr = new StreamReader(fs)) {
+                    json = DynamicJson.Parse(sr.ReadToEnd());
+                }
             }
-            data = sb.ToString();
-            sr.Close();
-            fs.Close();
         }
         else {
            Console.WriteLine("write to " + PROP_NAME);
-           FileStream fs = File.Create(PROP_NAME);
-           StreamWriter sw = new StreamWriter(fs);
-           sw.WriteLine(data);
-           sw.Close();
-           fs.Close();
+           json = new DynamicJson();
+           json.name = "basyura";
+           // 厳密には別ファイルを作成した後で mv するべきだよなぁ
+           using (FileStream fs = new FileStream(PROP_NAME, FileMode.Create)) {
+               using (StreamWriter sw = new StreamWriter(fs)) {
+                   sw.WriteLine(json.ToString());
+               }
+           }
         }
 
-        dynamic json = DynamicJson.Parse(data);
         Console.WriteLine(json.name);
         json.name = "hoge";
         Console.WriteLine(json.name);
