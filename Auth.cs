@@ -16,6 +16,11 @@ namespace Twitter {
         const string REQUEST_TOKEN_URL = "https://twitter.com/oauth/request_token";
         const string ACCESS_TOKEN_URL  = "https://twitter.com/oauth/access_token";
         const string AUTHORIZE_URL     = "https://twitter.com/oauth/authorize";
+        const string API_URL           = "http://twitter.com/";
+
+        private static Dictionary<string, string> API_MAP = new Dictionary<string, string>() {
+            {"home_timeline" , API_URL + "statuses/home_timeline" + ".json"}
+        };
 
         private Random random = new Random();
 
@@ -27,6 +32,7 @@ namespace Twitter {
         public string AccessTokenSecret  { get; private set; }
         public string UserId             { get; private set; }
         public string ScreenName         { get; private set; }
+
 
         public Auth(string consumerKey, string consumerSecret) {
             ServicePointManager.Expect100Continue = false;
@@ -74,11 +80,12 @@ namespace Twitter {
             ScreenName        = dic["screen_name"];
         }
 
-        public dynamic Get(string url, IDictionary<string, string> parameters) {
+        public dynamic Get(string method, IDictionary<string, string> parameters) {
             SortedDictionary<string, string> parameters2 = GenerateParameters(AccessToken);
             foreach (var p in parameters) {
                 parameters2.Add(p.Key, p.Value);
             }
+            string url = API_MAP[method];
             string signature = GenerateSignature(AccessTokenSecret, "GET", url, parameters2);
             parameters2.Add("oauth_signature", UrlEncode(signature));
             return HttpGet(url, parameters2);

@@ -5,8 +5,9 @@ def csc(cmd)
   system "csc /nologo #{cmd}"
 end
 
-task :all => [:libraries , :twitter] do
-end
+task :all => [
+  :libraries , :twitter
+] do end
 
 task :libraries do
   csc '/t:library DynamicJson.cs'
