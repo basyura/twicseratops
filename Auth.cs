@@ -191,7 +191,7 @@ namespace Twitter {
             }
         }
 
-        string HttpPost(string url, IDictionary<string, string> parameters) {
+        private dynamic HttpPost(string url, IDictionary<string, string> parameters) {
             byte[] data = Encoding.ASCII.GetBytes(JoinParameters(parameters));
 
             WebRequest req = WebRequest.Create(url);
@@ -204,14 +204,16 @@ namespace Twitter {
             reqStream.Close();
 
             WebResponse res  = req.GetResponse();
-            Stream resStream = res.GetResponseStream();
-            StreamReader reader = new StreamReader(resStream, Encoding.UTF8);
-            string result = reader.ReadToEnd();
-
-            reader.Close();
-            resStream.Close();
-            return result;
-
+            using (Stream stream = res.GetResponseStream()) {
+                using (StreamReader reader = new StreamReader(stream)) {
+                    if (url.EndsWith("json")) {
+                        return DynamicJson.Parse(reader.ReadToEnd());
+                    }
+                    else {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
         }
 
         private Dictionary<string, string> ParseResponse(string response) {
