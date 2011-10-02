@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Dynamic;
 using Codeplex.Data;
 using Twitter;
 
@@ -8,7 +9,7 @@ namespace Twitter {
     /**
      *
      */
-    class Twitter {
+    class Twitter : DynamicObject {
         /** */
         private static string PROP_PATH = "./twitter.properties";
         /** */
@@ -19,11 +20,11 @@ namespace Twitter {
         public Twitter() {
             auth_ = newAuth();
         }
-        /**
+        /*
          *
          */
-        public dynamic HomeTimeline() {
-            return auth_.Get("home_timeline", new Dictionary<string, string>());
+        public dynamic Request(string method , params string[] args) {
+            return auth_.Get(method, new Dictionary<string, string>());
         }
         /**
          *
@@ -95,7 +96,7 @@ namespace Twitter {
         static void Main(string[] args) {
 
             Twitter twitter = new Twitter();
-            dynamic res = twitter.HomeTimeline();
+            dynamic res = twitter.Request("home_timeline");
             foreach (dynamic status in res) {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
