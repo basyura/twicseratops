@@ -24,7 +24,7 @@ namespace Twitter {
          *
          */
         public dynamic Request(string method , params string[] args) {
-            return auth_.Get(method, new Dictionary<string, string>());
+            return auth_.Get(method, args);
         }
         /**
          *
