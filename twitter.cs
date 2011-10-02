@@ -24,7 +24,7 @@ namespace Twitter {
          *
          */
         public dynamic Request(string method , params string[] args) {
-            return auth_.Get(method, args);
+            return auth_.Request(method, args);
         }
         /**
          *
@@ -96,7 +96,8 @@ namespace Twitter {
         static void Main(string[] args) {
 
             Twitter twitter = new Twitter();
-            dynamic res = twitter.Request("home_timeline");
+            //dynamic res = twitter.Request("home_timeline");
+            dynamic res = twitter.Request("list_statuses" , "basyura" , "all");
             foreach (dynamic status in res) {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
