@@ -158,7 +158,13 @@ namespace Twitter {
             ScreenName        = dic["screen_name"];
         }
 
-        public dynamic Request(string api , string[] args) {
+        public dynamic Request(string api , object[] args) {
+            
+            Dictionary<string, string> param = new Dictionary<string, string>();
+            if (args.Length != 0 && args[args.Length - 1] is Dictionary<string, string>) {
+                param = (Dictionary<string, string>)args[args.Length - 1];
+                Array.Resize(ref args, args.Length - 1);
+            }
 
             string url    = String.Format(API_MAP[api] , args);
             string method = API_MAP[api + ":method"];
@@ -166,6 +172,9 @@ namespace Twitter {
             SortedDictionary<string, string> parameters = GenerateParameters(AccessToken);
             string signature = GenerateSignature(AccessTokenSecret, method , url, parameters);
             parameters.Add("oauth_signature", UrlEncode(signature));
+            foreach (var key in param.Keys) {
+                parameters.Add(key , UrlEncode(param[key]));
+            }
 
             if (method == "GET") {
                 return HttpGet(url, parameters);
@@ -193,6 +202,11 @@ namespace Twitter {
 
         private dynamic HttpPost(string url, IDictionary<string, string> parameters) {
             byte[] data = Encoding.ASCII.GetBytes(JoinParameters(parameters));
+
+            Console.WriteLine(url);
+            foreach (var key in parameters.Keys) {
+                Console.WriteLine(string.Format("Key : {0} / Value : {1}", key, parameters[key]));
+            }
 
             WebRequest req = WebRequest.Create(url);
             req.Method        = "POST";

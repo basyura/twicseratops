@@ -23,8 +23,14 @@ namespace Twitter {
         /*
          *
          */
-        public dynamic Request(string method , params string[] args) {
+        public dynamic Request(string method , params object[] args) {
             return auth_.Request(method, args);
+        }
+        public dynamic Update(string status) {
+            Dictionary<string, string> param = new Dictionary<string, string>() {
+                {"status" , status}
+            };
+            return Request("update_status", param);
         }
         /**
          *
@@ -102,6 +108,13 @@ namespace Twitter {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
 
+                           
+            res = twitter.Request("replies");
+            foreach (dynamic status in res) {
+                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
+            }
+
+            twitter.Request("update_status" , new Dictionary<string, string>() {{"status" , "test"}});
             /*
             // ポストしてみる
             Console.WriteLine("いまどうしてる？");
