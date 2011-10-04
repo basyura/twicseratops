@@ -11,7 +11,7 @@ using System.Net;
 using System.IO;
 using Codeplex.Data;
 
-namespace Twitter {
+namespace Twicseratops {
     /**
      *
      */

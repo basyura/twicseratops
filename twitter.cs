@@ -3,14 +3,14 @@ using System.IO;
 using System.Collections.Generic;
 using System.Dynamic;
 using Codeplex.Data;
-using Twitter;
+using Twicseratops;
 using System.Text.RegularExpressions;
 
-namespace Twitter {
+namespace Twicseratops {
     /**
      *
      */
-    class Twitter : DynamicObject {
+    public class Twitter : DynamicObject {
         /** */
         private const string API_URL   = "https://api.twitter.com/1";
         /** */
@@ -212,25 +212,6 @@ namespace Twitter {
                     sw.WriteLine(config.ToString());
                 }
             }
-        }
-        static void Main(string[] args) {
-
-            dynamic twitter = new Twitter();
-
-            dynamic res = twitter.ListStatuses("basyura" , "all");
-            foreach (dynamic status in res) {
-                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
-            }
-
-            twitter.Update("明日にしてくれ");
-
-                           
-            //res = twitter.Request("replies");
-            //foreach (dynamic status in res) {
-                //Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
-            //}
-
-            //twitter.Request("update_status" , new Dictionary<string, string>() {{"status" , "ほむほむ"}});
         }
     }
 }
