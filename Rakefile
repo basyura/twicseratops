@@ -2,7 +2,9 @@
 task :default => "all"
 
 def csc(cmd)
-  system "csc /nologo #{cmd}"
+  cmd = "csc /nologo #{cmd}"
+  puts cmd
+  system cmd
 end
 
 task :all => [
