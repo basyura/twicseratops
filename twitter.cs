@@ -114,15 +114,7 @@ namespace Twitter {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
 
-            twitter.Request("update_status" , new Dictionary<string, string>() {{"status" , "test"}});
-            /*
-            // ポストしてみる
-            Console.WriteLine("いまどうしてる？");
-            string status = Console.ReadLine();
-            parameters.Clear();
-            parameters.Add("status", auth.UrlEncode(status));
-            Console.WriteLine(auth.Post("http://twitter.com/statuses/update.xml", parameters));
-            */
+            twitter.Request("update_status" , new Dictionary<string, string>() {{"status" , "homu3"}});
         }
     }
 }
