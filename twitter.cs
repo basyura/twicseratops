@@ -105,10 +105,23 @@ namespace Twitter {
         public Twitter() {
             auth_ = newAuth();
         }
+        /**
+         *
+         */
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result) {
+           string method = binder.Name; 
+           result = Request(method , args);
+           return true;
+        }
         /*
          *
          */
-        public dynamic Request(string api , params object[] args) {
+        private dynamic Request(string api , object[] args) {
+
+            if (!API_MAP.ContainsKey(api)) {
+                throw new Exception("no such api : " + api);
+            }
+
             Dictionary<string, string> inParam = new Dictionary<string, string>();
             if (args.Length != 0 && args[args.Length - 1] is Dictionary<string, string>) {
                 inParam = (Dictionary<string, string>)args[args.Length - 1];
@@ -127,6 +140,7 @@ namespace Twitter {
         /*
          *
          */
+        /*
         public dynamic Update(string status) {
             Dictionary<string, string> param = new Dictionary<string, string>() {
                 {"status" , status}
@@ -202,18 +216,24 @@ namespace Twitter {
         }
         static void Main(string[] args) {
 
-            Twitter twitter = new Twitter();
+            dynamic twitter = new Twitter();
 
-            dynamic res = twitter.Request("list_statuses" , "basyura" , "all");
+            dynamic res = twitter.list_statuses("basyura" , "all");
             foreach (dynamic status in res) {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
+
+            Dictionary<string, string> param = new Dictionary<string, string>(){
+                {"status" , "hi"}
+            };
+
+            twitter.update_status(param);
 
                            
-            res = twitter.Request("replies");
-            foreach (dynamic status in res) {
-                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
-            }
+            //res = twitter.Request("replies");
+            //foreach (dynamic status in res) {
+                //Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
+            //}
 
             //twitter.Request("update_status" , new Dictionary<string, string>() {{"status" , "ほむほむ"}});
         }
