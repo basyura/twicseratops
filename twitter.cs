@@ -17,65 +17,65 @@ namespace Twitter {
         private const string PROP_PATH = "./twitter.properties";
         /** */
         const string APIS = @"
-          update_status           /statuses/update                POST
-          remove_status           /statuses/destroy/{0}           DELETE
-          public_timeline         /statuses/public_timeline
-          home_timeline           /statuses/home_timeline
-          friends_timeline        /statuses/friends_timeline
-          replies                 /statuses/replies
-          mentions                /statuses/mentions
-          user_timeline           /statuses/user_timeline/{0}
-          show                    /statuses/show/{0}
-          friends                 /statuses/friends/{0}
-          followers               /statuses/followers/{0}
-          retweet                 /statuses/retweet/{0}           POST
-          retweets                /statuses/retweets/{0}
-          retweeted_by_me         /statuses/retweeted_by_me
-          retweeted_to_me         /statuses/retweeted_to_me
-          retweets_of_me          /statuses/retweets_of_me
-          user                    /users/show/{0}
-          direct_messages         /direct_messages
-          sent_direct_messages    /direct_messages/sent
-          send_direct_message     /direct_messages/new            POST
-          remove_direct_message   /direct_messages/destroy/{0}    DELETE
-          follow                  /friendships/create/{0}         POST
-          leave                   /friendships/destroy/{0}        DELETE
-          friendship_exists       /friendships/exists
-          followers_ids           /followers/ids/{0}
-          friends_ids             /friends/ids/{0}
-          favorites               /favorites/{0}
-          favorite                /favorites/create/{0}           POST
-          remove_favorite         /favorites/destroy/{0}          DELETE
-          verify_credentials      /account/verify_credentials     GET
-          end_session             /account/end_session            POST
-          update_delivery_device  /account/update_delivery_device POST
-          update_profile_colors   /account/update_profile_colors  POST
-          limit_status            /account/rate_limit_status
-          update_profile          /account/update_profile         POST
-          enable_notification     /notifications/follow/{0}       POST
-          disable_notification    /notifications/leave/{0}        POST
-          block                   /blocks/create/{0}              POST
-          unblock                 /blocks/destroy/{0}             DELETE
-          block_exists            /blocks/exists/{0}              GET
-          blocking                /blocks/blocking                GET
-          blocking_ids            /blocks/blocking/ids            GET
-          saved_searches          /saved_searches                 GET
-          saved_search            /saved_searches/show/{0}        GET
-          create_saved_search     /saved_searches/create          POST
-          remove_saved_search     /saved_searches/destroy/{0}     DELETE
-          create_list             /{0}/lists                      POST
-          update_list             /{0}/lists/{1}                  PUT
-          DELETE_list             /{0}/lists/{1}                  DELETE
-          list                    /{0}/lists/{1}
-          lists                   /{0}/lists
-          lists_followers         /{0}/lists/memberships
-          list_statuses           /{0}/lists/{1}/statuses
-          list_members            /{0}/{1}/members
-          add_member_to_list      /{0}/{1}/members                POST
-          remove_member_from_list /{0}/{1}/members                DELETE
-          list_following          /{0}/{1}/subscribers
-          follow_list             /{0}/{1}/subscribers            POST
-          remove_list             /{0}/{1}/subscribers            DELETE
+          UpdateStatus          /statuses/update                POST
+          RemoveStatus          /statuses/destroy/{0}           DELETE
+          PublicTimeline        /statuses/public_timeline
+          HomeTimeline          /statuses/home_timeline
+          FriendsTimeline       /statuses/friends_timeline
+          Replies               /statuses/replies
+          Mentions              /statuses/mentions
+          UserTimeline          /statuses/user_timeline/{0}
+          Show                  /statuses/show/{0}
+          Friends               /statuses/friends/{0}
+          Followers             /statuses/followers/{0}
+          Retweet               /statuses/retweet/{0}           POST
+          Retweets              /statuses/retweets/{0}
+          RetweetedByMe         /statuses/retweeted_by_me
+          RetweetedToMe         /statuses/retweeted_to_me
+          RetweetsOfMe          /statuses/retweets_of_me
+          User                  /users/show/{0}
+          DirectMessages        /direct_messages
+          SentDirectMessages    /direct_messages/sent
+          SendDirectMessage     /direct_messages/new            POST
+          RemoveDirectMessage   /direct_messages/destroy/{0}    DELETE
+          Follow                /friendships/create/{0}         POST
+          Leave                 /friendships/destroy/{0}        DELETE
+          FriendshipExists      /friendships/exists
+          FollowersIds          /followers/ids/{0}
+          FriendsIds            /friends/ids/{0}
+          Favorites             /favorites/{0}
+          Favorite              /favorites/create/{0}           POST
+          RemoveFavorite        /favorites/destroy/{0}          DELETE
+          VerifyCredentials     /account/verify_credentials     GET
+          EndSession            /account/end_session            POST
+          UpdateDeliveryDevice  /account/update_delivery_device POST
+          UpdateProfileColors   /account/update_profile_colors  POST
+          LimitStatus           /account/rate_limit_status
+          UpdateProfile         /account/update_profile         POST
+          EnableNotification    /notifications/follow/{0}       POST
+          DisableNotification   /notifications/leave/{0}        POST
+          Block                 /blocks/create/{0}              POST
+          Unblock               /blocks/destroy/{0}             DELETE
+          BlockExists           /blocks/exists/{0}              GET
+          Blocking              /blocks/blocking                GET
+          BlockingIds           /blocks/blocking/ids            GET
+          SavedSearches         /saved_searches                 GET
+          SavedSearch           /saved_searches/show/{0}        GET
+          CreateSavedSearch     /saved_searches/create          POST
+          RemoveSavedSearch     /saved_searches/destroy/{0}     DELETE
+          CreateList            /{0}/lists                      POST
+          UpdateList            /{0}/lists/{1}                  PUT
+          DELETEList            /{0}/lists/{1}                  DELETE
+          List                  /{0}/lists/{1}
+          Lists                 /{0}/lists
+          ListsFollowers        /{0}/lists/memberships
+          ListStatuses          /{0}/lists/{1}/statuses
+          ListMembers           /{0}/{1}/members
+          AddMemberToList       /{0}/{1}/members                POST
+          RemoveMemberFromList  /{0}/{1}/members                DELETE
+          ListFollowing         /{0}/{1}/subscribers
+          FollowList            /{0}/{1}/subscribers            POST
+          RemoveList            /{0}/{1}/subscribers            DELETE
           ";
 
         private static Dictionary<string, string> API_MAP = new Dictionary<string, string>();
@@ -109,18 +109,18 @@ namespace Twitter {
          *
          */
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result) {
-           string method = binder.Name; 
-           result = Request(method , args);
+           string api = binder.Name; 
+            if (!API_MAP.ContainsKey(api)) {
+                result = null;
+                return false;
+            }
+           result = Request(api, args);
            return true;
         }
         /*
          *
          */
         private dynamic Request(string api , object[] args) {
-
-            if (!API_MAP.ContainsKey(api)) {
-                throw new Exception("no such api : " + api);
-            }
 
             Dictionary<string, string> inParam = new Dictionary<string, string>();
             if (args.Length != 0 && args[args.Length - 1] is Dictionary<string, string>) {
@@ -140,12 +140,11 @@ namespace Twitter {
         /*
          *
          */
-        /*
         public dynamic Update(string status) {
             Dictionary<string, string> param = new Dictionary<string, string>() {
                 {"status" , status}
             };
-            return Request("update_status", param);
+            return Request("UpdateStatus", new object[]{param});
         }
         /**
          *
@@ -218,16 +217,12 @@ namespace Twitter {
 
             dynamic twitter = new Twitter();
 
-            dynamic res = twitter.list_statuses("basyura" , "all");
+            dynamic res = twitter.ListStatuses("basyura" , "all");
             foreach (dynamic status in res) {
                 Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
             }
 
-            Dictionary<string, string> param = new Dictionary<string, string>(){
-                {"status" , "hi"}
-            };
-
-            twitter.update_status(param);
+            twitter.Update("明日にしてくれ");
 
                            
             //res = twitter.Request("replies");
