@@ -12,11 +12,11 @@ task :all => [
 ] do end
 
 task :libraries do
-  csc '/t:library DynamicJson.cs'
-  csc '/t:library /r:DynamicJson.dll Auth.cs'
-  csc '/t:library /r:DynamicJson.dll /r:Auth.dll twitter.cs'
+  csc '/t:library /out:bin/DynamicJson.dll lib/DynamicJson.cs'
+  csc '/t:library /r:bin/DynamicJson.dll   /out:bin/Auth.dll BasyuraOrg.Twitter/Auth.cs'
+  csc '/t:library /r:bin/DynamicJson.dll /r:bin/Auth.dll /out:bin/Twicseratops.dll BasyuraOrg.Twitter/Twicseratops.cs'
 end
 
 task :client do
-  csc '/r:Twitter.dll Client.cs'
+#  csc '/r:Twicseratops.dll Client.cs'
 end

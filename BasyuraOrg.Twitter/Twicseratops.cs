@@ -3,18 +3,18 @@ using System.IO;
 using System.Collections.Generic;
 using System.Dynamic;
 using Codeplex.Data;
-using Twicseratops;
+using BasyuraOrg.Twitter;
 using System.Text.RegularExpressions;
 
-namespace Twicseratops {
+namespace BasyuraOrg.Twitter {
     /**
      *
      */
-    public class Twitter : DynamicObject {
+    public class Twicseratops : DynamicObject {
         /** */
         private const string API_URL   = "https://api.twitter.com/1";
         /** */
-        private const string PROP_PATH = "./twitter.properties";
+        private const string PROP_PATH = "./twicseratops.properties";
         /** */
         const string APIS = @"
           UpdateStatus          /statuses/update                POST
@@ -82,7 +82,7 @@ namespace Twicseratops {
         /**
          *
          */
-        static Twitter() {
+        static Twicseratops() {
             Regex regex = new Regex(@"\s+");
             foreach (string line in APIS.Split('\n')) {
                 if (String.IsNullOrEmpty(line.Trim())) {
@@ -102,7 +102,7 @@ namespace Twicseratops {
         /**
          *
          */
-        public Twitter() {
+        public Twicseratops() {
             auth_ = newAuth();
         }
         /**

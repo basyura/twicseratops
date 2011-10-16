@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Twicseratops;
+using BasyuraOrg.Twitter;
 
 class Client {
     static void Main(string[] args) {
 
-        dynamic twitter = new Twitter();
+        dynamic twitter = new Twicseratops();
 
         Dictionary<string, string> param = new Dictionary<string, string> {
             {"per_page" , "100"}
