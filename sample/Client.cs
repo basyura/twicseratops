@@ -5,6 +5,7 @@ using BasyuraOrg.Twitter;
 class Client {
     static void Main(string[] args) {
 
+        /*
         dynamic twitter = new Twicseratops();
 
         Dictionary<string, string> param = new Dictionary<string, string> {
@@ -28,5 +29,6 @@ class Client {
             Console.WriteLine("post ... " + args[0]);
             twitter.Update(args[0]);
         }
+        */
     }
 }

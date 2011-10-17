@@ -38,29 +38,20 @@ namespace BasyuraOrg.Twitter {
         public string AccessToken        { get; private set; }
         /** */
         public string AccessTokenSecret  { get; private set; }
-        /** */
-        public string UserId             { get; private set; }
-        /** */
-        public string ScreenName         { get; private set; }
         /**
          *
          */
-        public Auth(string consumerKey, string consumerSecret) {
-            ServicePointManager.Expect100Continue = false;
-            ConsumerKey    = consumerKey;
-            ConsumerSecret = consumerSecret;
+        public Auth(string consumerKey, string consumerSecret) : this(consumerKey, consumerSecret, null, null) {
         }
         /**
          *
          */
-        public Auth(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, string userId, string screenName) {
+        public Auth(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) {
             ServicePointManager.Expect100Continue = false;
             ConsumerKey       = consumerKey;
             ConsumerSecret    = consumerSecret;
             AccessToken       = accessToken;
             AccessTokenSecret = accessTokenSecret;
-            UserId            = userId;
-            ScreenName        = screenName;
         }
         /**
          *
@@ -95,8 +86,8 @@ namespace BasyuraOrg.Twitter {
             Dictionary<string, string> dic = ParseResponse(response);
             AccessToken       = dic["oauth_token"];
             AccessTokenSecret = dic["oauth_token_secret"];
-            UserId            = dic["user_id"];
-            ScreenName        = dic["screen_name"];
+            //UserId            = dic["user_id"];
+            //ScreenName        = dic["screen_name"];
         }
         /**
          *
@@ -148,7 +139,9 @@ namespace BasyuraOrg.Twitter {
          */
         private IDictionary<string, string> MergeAccessParam(string url , string method, IDictionary<string, string> inParam) {
             SortedDictionary<string, string> param = GenerateParameters(AccessToken);
+            Console.WriteLine("=>=>=>=>=>=>");
             foreach (var key in inParam.Keys) {
+                Console.WriteLine(key);
                 param.Add(key , UrlEncode(inParam[key]));
             }
             string signature = GenerateSignature(AccessTokenSecret, method , url, param);
