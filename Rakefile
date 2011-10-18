@@ -45,7 +45,11 @@ def csc(config)
     puts cmd
   end
 
-  puts `#{cmd}`
+  out = `#{cmd}`
+  if out != ""
+    puts "\n  " + out
+    exit
+  end
 end
 
 # task
