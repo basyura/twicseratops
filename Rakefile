@@ -29,8 +29,25 @@ REF_ASSEMBLIES = [
 
 task :default => "all"
 
-def csc(cmd)
-  cmd = "csc /nologo #{REF_ASSEMBLIES} #{cmd}"
+def csc(config)
+
+  cmd = "csc /nologo #{REF_ASSEMBLIES} "
+
+  unless config.key? :t
+    cmd << '/t:library '
+  end
+
+  config.each_pair do |key, value|
+    if key == :src
+      key = :recurse
+    end
+    if value.kind_of?(Array)
+      value.each {|v| cmd << "/#{key}:#{v.to_s.gsub('/','\\\\\\')} "}
+    else
+      cmd << "/#{key}:#{value.to_s.gsub('/' , '\\\\\\')} "
+    end
+  end
+
   puts cmd + "\n\n"
   system cmd
 end
@@ -40,11 +57,11 @@ task :all => [
 ] do end
 
 task :libraries do
-  csc '/t:library /out:bin/DynamicJson.dll /recurse:lib\\\\DynamicJson.cs'
-  csc '/t:library /r:bin/DynamicJson.dll   /out:bin/Auth.dll /recurse:src\\\\BasyuraOrg.Twitter\\\\Auth.cs'
-  csc '/t:library /r:bin/DynamicJson.dll /r:bin/Auth.dll /out:bin/Twicseratops.dll /recurse:src\\\\BasyuraOrg.Twitter\\\\Twicseratops.cs'
+  csc out: 'bin/DynamicJson.dll'  , src: 'lib/DynamicJson.cs'
+  csc out: 'bin/Auth.dll'         , src: 'src/BasyuraOrg.Twitter/Auth.cs'         , r: 'bin/DynamicJson.dll'
+  csc out: 'bin/Twicseratops.dll' , src: 'src/BasyuraOrg.Twitter/Twicseratops.cs' , r: ['bin/DynamicJson.dll', 'bin/Auth.dll']
 end
 
 task :client do
-  csc '/t:exe /r:bin/Twicseratops.dll /out:bin/Client.exe /recurse:sample\\\\Client.cs'
+  csc t: :exe, out: 'bin/Client.exe', recurse: 'sample/Client.cs', r: 'bin/Twicseratops.dll'
 end
