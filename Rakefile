@@ -39,8 +39,13 @@ def csc(config)
     end
   end
 
-  puts cmd + "\n\n"
-  system cmd
+
+  puts "compile ... #{config[:src] || config[:recurse]}"
+  if ARGV.length != 0 && ARGV[0] == 'verbose=true'
+    puts cmd
+  end
+
+  puts `#{cmd}`
 end
 
 # task
