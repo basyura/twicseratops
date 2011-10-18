@@ -26,21 +26,12 @@ REF_ASSEMBLIES = [
   '/r:System.Xml.Linq.dll',
 ].join(' ')
 
-
-task :default => "all"
-
 def csc(config)
-
   cmd = "csc /nologo #{REF_ASSEMBLIES} "
-
-  unless config.key? :t
-    cmd << '/t:library '
-  end
+  cmd << '/t:library ' unless config.key? :t
 
   config.each_pair do |key, value|
-    if key == :src
-      key = :recurse
-    end
+    key = :recurse if key == :src
     if value.kind_of?(Array)
       value.each {|v| cmd << "/#{key}:#{v.to_s.gsub('/','\\\\\\')} "}
     else
@@ -51,6 +42,10 @@ def csc(config)
   puts cmd + "\n\n"
   system cmd
 end
+
+# task
+
+task :default => "all"
 
 task :all => [
   :libraries , :client
