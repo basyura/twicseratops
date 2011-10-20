@@ -9,20 +9,15 @@ using System.Text;
 using System.Web;
 using System.Net;
 using System.IO;
+
 using Codeplex.Data;
+using BasyuraOrg.Twitter;
 
 namespace BasyuraOrg.Twitter {
     /**
      *
      */
     public class TwicseraAuth {
-        /** */
-        const string REQUEST_TOKEN_URL = "https://twitter.com/oauth/request_token";
-        /** */
-        const string ACCESS_TOKEN_URL  = "https://twitter.com/oauth/access_token";
-        /** */
-        const string AUTHORIZE_URL     = "https://twitter.com/oauth/authorize";
-
         /** */
         private Random random = new Random();
 
@@ -31,18 +26,9 @@ namespace BasyuraOrg.Twitter {
         /** */
         public string ConsumerSecret     { get; private set; }
         /** */
-        public string RequestToken       { get; private set; }
-        /** */
-        public string RequestTokenSecret { get; private set; }
-        /** */
         public string AccessToken        { get; private set; }
         /** */
         public string AccessTokenSecret  { get; private set; }
-        /**
-         *
-         */
-        public TwicseraAuth(string consumerKey, string consumerSecret) : this(consumerKey, consumerSecret, null, null) {
-        }
         /**
          *
          */
@@ -53,41 +39,11 @@ namespace BasyuraOrg.Twitter {
             AccessToken       = accessToken;
             AccessTokenSecret = accessTokenSecret;
         }
-        /**
+        /*
          *
          */
-        public void GetRequestToken() {
-            SortedDictionary<string, string> parameters = GenerateParameters("");
-            string signature = GenerateSignature("", "GET", REQUEST_TOKEN_URL, parameters);
-            parameters.Add("oauth_signature", UrlEncode(signature));
-
-            dynamic response = HttpGet(REQUEST_TOKEN_URL, parameters);
-
-            Dictionary<string, string> dic = ParseResponse(response);
-            RequestToken       = dic["oauth_token"];
-            RequestTokenSecret = dic["oauth_token_secret"];
-        }
-        /**
-         *
-         */
-        public string GetAuthorizeUrl() {
-            return AUTHORIZE_URL + "?oauth_token=" + RequestToken;
-        }
-        /**
-         *
-         */
-        public void GetAccessToken(string pin) {
-            SortedDictionary<string, string> parameters = GenerateParameters(RequestToken);
-            parameters.Add("oauth_verifier" , pin);
-            string signature = GenerateSignature(RequestTokenSecret, "GET", ACCESS_TOKEN_URL, parameters);
-            parameters.Add("oauth_signature", UrlEncode(signature));
-            dynamic response = HttpGet(ACCESS_TOKEN_URL, parameters);
-
-            Dictionary<string, string> dic = ParseResponse(response);
-            AccessToken       = dic["oauth_token"];
-            AccessTokenSecret = dic["oauth_token_secret"];
-            //UserId            = dic["user_id"];
-            //ScreenName        = dic["screen_name"];
+        public static AuthRegister NewRegister(string consumerKey, string consumerSecret) {
+            return new AuthRegister(consumerKey, consumerSecret);
         }
         /**
          *
@@ -159,7 +115,7 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        private Dictionary<string, string> ParseResponse(string response) {
+        protected Dictionary<string, string> ParseResponse(string response) {
             Dictionary<string, string> result = new Dictionary<string, string>();
             foreach (string s in response.Split('&')) {
                 int index = s.IndexOf('=');
@@ -194,7 +150,7 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        private string GenerateSignature(string tokenSecret, string httpMethod, string url, SortedDictionary<string, string> parameters) {
+        protected string GenerateSignature(string tokenSecret, string httpMethod, string url, SortedDictionary<string, string> parameters) {
             string signatureBase = GenerateSignatureBase(httpMethod, url, parameters);
             HMACSHA1 hmacsha1 = new HMACSHA1();
             hmacsha1.Key = Encoding.ASCII.GetBytes(UrlEncode(ConsumerSecret) + '&' + UrlEncode(tokenSecret));
@@ -217,7 +173,7 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        private SortedDictionary<string, string> GenerateParameters(string token) {
+        protected SortedDictionary<string, string> GenerateParameters(string token) {
             SortedDictionary<string, string> result = new SortedDictionary<string, string>();
             result.Add("oauth_consumer_key"     , ConsumerKey);
             result.Add("oauth_signature_method" , "HMAC-SHA1");
@@ -232,7 +188,7 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        private string UrlEncode(string value) {
+        protected string UrlEncode(string value) {
             string unreserved = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
             StringBuilder result = new StringBuilder();
             byte[] data = Encoding.UTF8.GetBytes(value);

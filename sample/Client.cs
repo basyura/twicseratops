@@ -5,8 +5,13 @@ using BasyuraOrg.Twitter;
 class Client {
     static void Main(string[] args) {
 
-        /*
-        dynamic twitter = new Twicseratops();
+        string consumerKey       = "IGWZ6nY3v3cHBh0yfj6RJw";
+        string consumerSecret    = "zfwTlwwjGSAKChGwJi5DpJSBsIlZ7HE3ZCMUfelCk";
+        string accessToken       = "";
+        string accessTokenSecret = "";
+
+
+        dynamic twitter = new Twicseratops(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 
         Dictionary<string, string> param = new Dictionary<string, string> {
             {"per_page" , "100"}
@@ -29,6 +34,5 @@ class Client {
             Console.WriteLine("post ... " + args[0]);
             twitter.Update(args[0]);
         }
-        */
     }
 }

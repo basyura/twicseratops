@@ -1,3 +1,4 @@
+require 'fileutils'
 
 REF_ASSEMBLIES = [
   '/r:Accessibility.dll',
@@ -57,15 +58,22 @@ end
 task :default => "all"
 
 task :all => [
-  :libraries , :client
+  :pre_compile, :libraries , :client
 ] do end
+
+task :pre_compile do
+  #FileUtils.rm 'bin/DynamicJson.dll'
+  #FileUtils.rm 'bin/TwicseraAuth.dll'
+  #FileUtils.rm 'bin/AuthRegister.dll'
+  #FileUtils.rm 'bin/Client.exe'
+end
 
 task :libraries do
   csc out: 'bin/DynamicJson.dll'  , src: 'lib/DynamicJson.cs'
-  csc out: 'bin/TwicseraAuth.dll' , src: 'src/BasyuraOrg.Twitter/TwicseraAuth.cs' , r: 'bin/DynamicJson.dll'
-  csc out: 'bin/Twicseratops.dll' , src: 'src/BasyuraOrg.Twitter/Twicseratops.cs' , r: ['bin/DynamicJson.dll', 'bin/TwicseraAuth.dll']
+  csc out: 'bin/Twicseratops.dll' , recurse: 'src/BasyuraOrg.Twitter/*.cs' , r: 'bin/DynamicJson.dll'
 end
 
 task :client do
-  csc t: :exe, out: 'bin/Client.exe', recurse: 'sample/Client.cs', r: 'bin/Twicseratops.dll'
+  csc t: :exe, out: 'bin/Client.exe'  , recurse: 'sample/Client.cs'  , r: 'bin/Twicseratops.dll'
+  csc t: :exe, out: 'bin/GetToken.exe', recurse: 'sample/GetToken.cs', r: 'bin/Twicseratops.dll'
 end

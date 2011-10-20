@@ -146,27 +146,11 @@ namespace BasyuraOrg.Twitter {
             };
             return Request("UpdateStatus", new object[]{param});
         }
-        /**
-         *
-         */
-        public static String GetAuthorizeUrl(string consumerKey, string consumerSecret) {
-            // 認証オブジェクト生成
-            TwicseraAuth auth = new TwicseraAuth(consumerKey, consumerSecret);
-            // リクエストトークンを取得する
-            auth.GetRequestToken();
-
-            return auth.GetAuthorizeUrl();
-        }
         /*
          *
          */
-        public static String[] GetAccessTokenAndSecret(string consumerKey, string consumerSecret, string pin) {
-            // 認証オブジェクト生成
-            TwicseraAuth auth = new TwicseraAuth(consumerKey, consumerSecret);
-            // アクセストークンを取得する
-            auth.GetAccessToken(pin);
-
-            return new string[] { auth.AccessToken, auth.AccessTokenSecret };
+        public static AuthRegister NewRegister(string consumerKey, string consumerSecret) {
+            return new AuthRegister(consumerKey, consumerSecret);
         }
     }
 }
