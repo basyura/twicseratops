@@ -3,10 +3,7 @@ using BasyuraOrg.Twitter;
 
 class Class1 {
     static void Main(string[] args) {
-        string consumerKey    = "IGWZ6nY3v3cHBh0yfj6RJw";
-        string consumerSecret = "zfwTlwwjGSAKChGwJi5DpJSBsIlZ7HE3ZCMUfelCk";
-
-        AuthRegister register = Twicseratops.NewRegister(consumerKey, consumerSecret);
+        AuthRegister register = Twicseratops.NewRegister();
         string url = register.GetAuthorizeUrl();
 
         Console.WriteLine("次のURLにアクセスして暗証番号を取得してください：");
