@@ -42,8 +42,8 @@ namespace BasyuraOrg.Twitter {
         /*
          *
          */
-        public static AuthRegister NewRegister(string consumerKey, string consumerSecret) {
-            return new AuthRegister(consumerKey, consumerSecret);
+        public static TwicseraRegister NewRegister(string consumerKey, string consumerSecret) {
+            return new TwicseraRegister(consumerKey, consumerSecret);
         }
         /**
          *

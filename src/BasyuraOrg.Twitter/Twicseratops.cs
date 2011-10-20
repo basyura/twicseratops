@@ -107,6 +107,12 @@ namespace BasyuraOrg.Twitter {
         public Twicseratops(string accessToken, string accessTokenSecret) {
             auth_ = new TwicseraAuth(CONSUMER_KEY, CONSUMER_SECRET, accessToken, accessTokenSecret);
         }
+        /*
+         *
+         */
+        public static TwicseraRegister NewRegister() {
+            return new TwicseraRegister(CONSUMER_KEY, CONSUMER_SECRET);
+        }
         /**
          *
          */
@@ -118,6 +124,15 @@ namespace BasyuraOrg.Twitter {
             }
            result = Request(api, args);
            return true;
+        }
+        /*
+         *
+         */
+        public dynamic Update(string status) {
+            Dictionary<string, string> param = new Dictionary<string, string>() {
+                {"status" , status}
+            };
+            return Request("UpdateStatus", new object[]{param});
         }
         /*
          *
@@ -138,21 +153,6 @@ namespace BasyuraOrg.Twitter {
             else {
                 return auth_.HttpPost(url , inParam);
             }
-        }
-        /*
-         *
-         */
-        public dynamic Update(string status) {
-            Dictionary<string, string> param = new Dictionary<string, string>() {
-                {"status" , status}
-            };
-            return Request("UpdateStatus", new object[]{param});
-        }
-        /*
-         *
-         */
-        public static AuthRegister NewRegister() {
-            return new AuthRegister(CONSUMER_KEY, CONSUMER_SECRET);
         }
     }
 }

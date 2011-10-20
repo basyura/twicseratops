@@ -6,7 +6,7 @@ namespace BasyuraOrg.Twitter {
     /**
      *
      */
-    public class AuthRegister : TwicseraAuth {
+    public class TwicseraRegister : TwicseraAuth {
         /** */
         const string REQUEST_TOKEN_URL = "https://twitter.com/oauth/request_token";
         /** */
@@ -20,7 +20,7 @@ namespace BasyuraOrg.Twitter {
         /*
          *
          */
-        public AuthRegister(string consumerKey, string consumerSecret) : base(consumerKey, consumerSecret, null, null) {
+        public TwicseraRegister(string consumerKey, string consumerSecret) : base(consumerKey, consumerSecret, null, null) {
         }
         /*
          *
