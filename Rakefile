@@ -62,8 +62,8 @@ task :all => [
 
 task :libraries do
   csc out: 'bin/DynamicJson.dll'  , src: 'lib/DynamicJson.cs'
-  csc out: 'bin/Auth.dll'         , src: 'src/BasyuraOrg.Twitter/Auth.cs'         , r: 'bin/DynamicJson.dll'
-  csc out: 'bin/Twicseratops.dll' , src: 'src/BasyuraOrg.Twitter/Twicseratops.cs' , r: ['bin/DynamicJson.dll', 'bin/Auth.dll']
+  csc out: 'bin/TwicseraAuth.dll' , src: 'src/BasyuraOrg.Twitter/TwicseraAuth.cs' , r: 'bin/DynamicJson.dll'
+  csc out: 'bin/Twicseratops.dll' , src: 'src/BasyuraOrg.Twitter/Twicseratops.cs' , r: ['bin/DynamicJson.dll', 'bin/TwicseraAuth.dll']
 end
 
 task :client do

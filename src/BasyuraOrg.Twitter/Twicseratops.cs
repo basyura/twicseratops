@@ -98,12 +98,12 @@ namespace BasyuraOrg.Twitter {
             }
         }
         /** */
-        private Auth auth_ = null;
+        private TwicseraAuth auth_ = null;
         /**
          *
          */
         public Twicseratops(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) {
-            auth_ = new Auth(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+            auth_ = new TwicseraAuth(consumerKey, consumerSecret, accessToken, accessTokenSecret);
         }
         /**
          *
@@ -151,7 +151,7 @@ namespace BasyuraOrg.Twitter {
          */
         public static String GetAuthorizeUrl(string consumerKey, string consumerSecret) {
             // 認証オブジェクト生成
-            Auth auth = new Auth(consumerKey, consumerSecret);
+            TwicseraAuth auth = new TwicseraAuth(consumerKey, consumerSecret);
             // リクエストトークンを取得する
             auth.GetRequestToken();
 
@@ -162,7 +162,7 @@ namespace BasyuraOrg.Twitter {
          */
         public static String[] GetAccessTokenAndSecret(string consumerKey, string consumerSecret, string pin) {
             // 認証オブジェクト生成
-            Auth auth = new Auth(consumerKey, consumerSecret);
+            TwicseraAuth auth = new TwicseraAuth(consumerKey, consumerSecret);
             // アクセストークンを取得する
             auth.GetAccessToken(pin);
 

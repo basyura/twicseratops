@@ -15,7 +15,7 @@ namespace BasyuraOrg.Twitter {
     /**
      *
      */
-    public class Auth {
+    public class TwicseraAuth {
         /** */
         const string REQUEST_TOKEN_URL = "https://twitter.com/oauth/request_token";
         /** */
@@ -41,12 +41,12 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        public Auth(string consumerKey, string consumerSecret) : this(consumerKey, consumerSecret, null, null) {
+        public TwicseraAuth(string consumerKey, string consumerSecret) : this(consumerKey, consumerSecret, null, null) {
         }
         /**
          *
          */
-        public Auth(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) {
+        public TwicseraAuth(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) {
             ServicePointManager.Expect100Continue = false;
             ConsumerKey       = consumerKey;
             ConsumerSecret    = consumerSecret;
@@ -93,7 +93,13 @@ namespace BasyuraOrg.Twitter {
          *
          */
         public dynamic HttpGet(string url, IDictionary<string, string> parameters) {
-            WebRequest  req = WebRequest.Create(url + '?' + JoinParameters(MergeAccessParam(url, "GET", parameters)));
+            WebRequest req = null;
+            if (!String.IsNullOrEmpty(AccessToken)) {
+                req = WebRequest.Create(url + '?' + JoinParameters(MergeAccessParam(url, "GET", parameters)));
+            }
+            else {
+                req = WebRequest.Create(url + '?' + JoinParameters(parameters));
+            }
             WebResponse res = req.GetResponse();
 
             using (Stream stream = res.GetResponseStream()) {
@@ -139,13 +145,15 @@ namespace BasyuraOrg.Twitter {
          */
         private IDictionary<string, string> MergeAccessParam(string url , string method, IDictionary<string, string> inParam) {
             SortedDictionary<string, string> param = GenerateParameters(AccessToken);
-            Console.WriteLine("=>=>=>=>=>=>");
             foreach (var key in inParam.Keys) {
-                Console.WriteLine(key);
-                param.Add(key , UrlEncode(inParam[key]));
+                if (!param.ContainsKey(key)) {
+                    param.Add(key , UrlEncode(inParam[key]));
+                }
             }
-            string signature = GenerateSignature(AccessTokenSecret, method , url, param);
-            param.Add("oauth_signature", UrlEncode(signature));
+            if (!String.IsNullOrEmpty(AccessToken)) {
+                string signature = GenerateSignature(AccessTokenSecret, method , url, param);
+                param.Add("oauth_signature", UrlEncode(signature));
+            }
             return param;
         }
         /**
