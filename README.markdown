@@ -53,17 +53,17 @@ twicseratops is a twitter library for c# like a rubytter.rb
             };
             // get list statuses
             foreach (dynamic status in twitter.ListStatuses("basyura" , "all" , param)) {
-                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
+                Console.WriteLine(status.user.screen_name + " : " + status.text);
             }
             Console.WriteLine("----------------------------");
             // get replies
             foreach (dynamic status in twitter.Replies()) {
-                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
+                Console.WriteLine(status.user.screen_name + " : " + status.text);
             }
             Console.WriteLine("----------------------------");
             // get home timeline
             foreach (dynamic status in twitter.HomeTimeline()) {
-                Console.WriteLine(status.user.screen_name.PadRight(15 , ' ') + " : " + status.text);
+                Console.WriteLine(status.user.screen_name + " : " + status.text);
             }
             Console.WriteLine("----------------------------");
             // tweet my status
