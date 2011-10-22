@@ -43,7 +43,10 @@ twicseratops is a twitter library for c# like a rubytter.rb
     class Client {
         static void Main(string[] args) {
 
-            dynamic twitter = new Twitter();
+            string accessToken       = "your access token";
+            string accessTokenSecret = "your access token secret";
+
+            dynamic twitter = new Twicseratops(accessToken, accessTokenSecret);
             // parameter
             Dictionary<string, string> param = new Dictionary<string, string> {
                 {"per_page" , "100"}
