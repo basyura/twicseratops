@@ -12,10 +12,6 @@ namespace BasyuraOrg.Twitter {
      */
     public class Twicseratops : DynamicObject {
         /** */
-        protected const string CONSUMER_KEY    = "IGWZ6nY3v3cHBh0yfj6RJw";
-        /** */
-        protected const string CONSUMER_SECRET = "zfwTlwwjGSAKChGwJi5DpJSBsIlZ7HE3ZCMUfelCk";
-        /** */
         private const string API_URL  = "https://api.twitter.com/1";
         /** */
         const string APIS = @"
@@ -105,13 +101,13 @@ namespace BasyuraOrg.Twitter {
          *
          */
         public Twicseratops(string accessToken, string accessTokenSecret) {
-            auth_ = new TwicseraAuth(CONSUMER_KEY, CONSUMER_SECRET, accessToken, accessTokenSecret);
+            auth_ = new TwicseraAuth(new TwicseraConf(accessToken, accessTokenSecret));
         }
         /*
          *
          */
         public static TwicseraRegister NewRegister() {
-            return new TwicseraRegister(CONSUMER_KEY, CONSUMER_SECRET);
+            return new TwicseraRegister(new TwicseraConf());
         }
         /**
          *

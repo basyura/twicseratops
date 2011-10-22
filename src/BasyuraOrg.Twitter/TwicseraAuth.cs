@@ -20,37 +20,21 @@ namespace BasyuraOrg.Twitter {
     public class TwicseraAuth {
         /** */
         private Random random = new Random();
-
         /** */
-        public string ConsumerKey        { get; private set; }
-        /** */
-        public string ConsumerSecret     { get; private set; }
-        /** */
-        public string AccessToken        { get; private set; }
-        /** */
-        public string AccessTokenSecret  { get; private set; }
+        private TwicseraConf conf_ = null;
         /**
          *
          */
-        public TwicseraAuth(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret) {
+        public TwicseraAuth(TwicseraConf conf) {
             ServicePointManager.Expect100Continue = false;
-            ConsumerKey       = consumerKey;
-            ConsumerSecret    = consumerSecret;
-            AccessToken       = accessToken;
-            AccessTokenSecret = accessTokenSecret;
-        }
-        /*
-         *
-         */
-        public static TwicseraRegister NewRegister(string consumerKey, string consumerSecret) {
-            return new TwicseraRegister(consumerKey, consumerSecret);
+            conf_ = conf;
         }
         /**
          *
          */
         public dynamic HttpGet(string url, IDictionary<string, string> parameters) {
             WebRequest req = null;
-            if (!String.IsNullOrEmpty(AccessToken)) {
+            if (!String.IsNullOrEmpty(conf_.AccessToken)) {
                 req = WebRequest.Create(url + '?' + JoinParameters(MergeAccessParam(url, "GET", parameters)));
             }
             else {
@@ -100,14 +84,14 @@ namespace BasyuraOrg.Twitter {
          *
          */
         private IDictionary<string, string> MergeAccessParam(string url , string method, IDictionary<string, string> inParam) {
-            SortedDictionary<string, string> param = GenerateParameters(AccessToken);
+            SortedDictionary<string, string> param = GenerateParameters(conf_.AccessToken);
             foreach (var key in inParam.Keys) {
                 if (!param.ContainsKey(key)) {
                     param.Add(key , UrlEncode(inParam[key]));
                 }
             }
-            if (!String.IsNullOrEmpty(AccessToken)) {
-                string signature = GenerateSignature(AccessTokenSecret, method , url, param);
+            if (!String.IsNullOrEmpty(conf_.AccessToken)) {
+                string signature = GenerateSignature(conf_.AccessTokenSecret, method , url, param);
                 param.Add("oauth_signature", UrlEncode(signature));
             }
             return param;
@@ -153,7 +137,7 @@ namespace BasyuraOrg.Twitter {
         protected string GenerateSignature(string tokenSecret, string httpMethod, string url, SortedDictionary<string, string> parameters) {
             string signatureBase = GenerateSignatureBase(httpMethod, url, parameters);
             HMACSHA1 hmacsha1 = new HMACSHA1();
-            hmacsha1.Key = Encoding.ASCII.GetBytes(UrlEncode(ConsumerSecret) + '&' + UrlEncode(tokenSecret));
+            hmacsha1.Key = Encoding.ASCII.GetBytes(UrlEncode(conf_.ConsumerSecret) + '&' + UrlEncode(tokenSecret));
             byte[] data = System.Text.Encoding.ASCII.GetBytes(signatureBase);
             byte[] hash = hmacsha1.ComputeHash(data);
             return Convert.ToBase64String(hash);
@@ -175,7 +159,7 @@ namespace BasyuraOrg.Twitter {
          */
         protected SortedDictionary<string, string> GenerateParameters(string token) {
             SortedDictionary<string, string> result = new SortedDictionary<string, string>();
-            result.Add("oauth_consumer_key"     , ConsumerKey);
+            result.Add("oauth_consumer_key"     , conf_.ConsumerKey);
             result.Add("oauth_signature_method" , "HMAC-SHA1");
             result.Add("oauth_timestamp"        , GenerateTimestamp());
             result.Add("oauth_nonce"            , GenerateNonce());

@@ -20,7 +20,7 @@ namespace BasyuraOrg.Twitter {
         /*
          *
          */
-        public TwicseraRegister(string consumerKey, string consumerSecret) : base(consumerKey, consumerSecret, null, null) {
+        public TwicseraRegister(TwicseraConf conf) : base(conf) {
         }
         /*
          *
