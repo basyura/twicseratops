@@ -9,21 +9,32 @@ twicseratops is a twitter library for c# like a rubytter.rb
 
     $ rake
 
-# how to use 
+# code
 
-## property
+## how to get access token
+    
+    using System;
+    using BasyuraOrg.Twitter;
 
-It is necessary to put twitter.properties on the same directory as twitter.dll .  
-The format of a property is json.
+    class Class1 {
+        static void Main(string[] args) {
+            TwicseraRegister register = Twicseratops.NewRegister();
+            string url = register.GetAuthorizeUrl();
 
-    {
-      "consumer_key"        : your consumer_key ,
-      "consumer_secret"     : your consumer secret ,
-      "access_token"        : your access token ,
-      "access_token_secret" : your access token secret
+            Console.WriteLine("access url to get pin");
+            Console.WriteLine(url);
+            Console.Write("pin：");
+            string pin = Console.ReadLine().Trim();
+
+            string[] keys = register.GetAccessTokenAndSecret(pin);
+
+            Console.WriteLine("access token        : " + keys[0]);
+            Console.WriteLine("access token secret : " + keys[1]);
+        }
     }
 
-## code
+
+## how to get timeline
 
     using System;
     using System.Collections.Generic;
