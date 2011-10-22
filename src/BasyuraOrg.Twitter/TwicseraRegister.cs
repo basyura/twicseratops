@@ -21,12 +21,14 @@ namespace BasyuraOrg.Twitter {
          *
          */
         public TwicseraRegister(TwicseraConf conf) : base(conf) {
+            string[] pair = GetRequestTokenAndSecret();
+            requestToken_       = pair[0];
+            requestTokenSecret_ = pair[1];
         }
         /*
          *
          */
         public string GetAuthorizeUrl() {
-            GetRequestToken();
             return AUTHORIZE_URL + "?oauth_token=" + requestToken_;
         }
         /*
@@ -46,7 +48,7 @@ namespace BasyuraOrg.Twitter {
         /**
          *
          */
-        private void GetRequestToken() {
+        private String[] GetRequestTokenAndSecret() {
             SortedDictionary<string, string> parameters = GenerateParameters("");
             string signature = GenerateSignature("", "GET", REQUEST_TOKEN_URL, parameters);
             parameters.Add("oauth_signature", UrlEncode(signature));
@@ -54,8 +56,7 @@ namespace BasyuraOrg.Twitter {
             dynamic response = HttpGet(REQUEST_TOKEN_URL, parameters);
 
             Dictionary<string, string> dic = ParseResponse(response);
-            requestToken_       = dic["oauth_token"];
-            requestTokenSecret_ = dic["oauth_token_secret"];
+            return new string[] { dic["oauth_token"] , dic["oauth_token_secret"] };
         }
     }
 }
